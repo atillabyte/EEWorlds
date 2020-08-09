@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="PlayerIOClient-Signed" Version="3.5.2" />
+    <PackageReference Include="Tson" Version="3.2.3" />
+  </ItemGroup>
+
+</Project>
