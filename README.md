@@ -1,4 +1,4 @@
-## EEWorlds
+## Everybody Edits World Library
 
 <p align="center">
   <img width="460" height="300" src="https://i.imgur.com/SSU2oxl.png">
@@ -17,7 +17,7 @@ A library to handle loading Everybody Edits worlds from various formats. such as
 var world = WorldManager.LoadFromTSON(File.ReadAllBytes("PW_Dc2Pqq8a0I.tson"));
 
 // EEditor
-var world = WorldManager.LoadFromEEditor(File.ReadAllBytes("PWfGHlYfF6cUI.eelevel"), EELevelVersion.V6);
+var world = WorldManager.LoadFromEEditor(File.ReadAllBytes("PW_DcPqq8a0I.eelevel"), EELevelVersion.V6);
 
 // EELVL
 var world = WorldManager.LoadFromEELVL(File.ReadAllBytes("PWXFk-UKg_b0I.eelvl"));
