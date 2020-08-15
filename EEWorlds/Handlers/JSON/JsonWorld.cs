@@ -1,17 +1,128 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PlayerIOClient;
 
 namespace EEWorlds.Handlers.JSON
 {
+    public class JsonWorld : WorldManager
+    {
+        public override WorldFormat Format => WorldFormat.JSON;
+        internal JObject _world_json_object;
+
+        [JsonIgnore]
+        public IEnumerable<IBlockChunk> Chunks { get => this.JsonWorldData; }
+
+        internal static WorldManager Load(string input)
+        {
+            var json_object = JObject.Parse((string)input);
+            var world = JsonConvert.DeserializeObject<JsonWorld>(input);
+
+            world._world_json_object = json_object;
+            return world;
+        }
+
+        [JsonIgnore]
+        internal IEnumerable<JsonBlockChunk> JsonWorldData => _world_json_object.FromJsonArray();
+
+        [JsonProperty("owner")]
+        public override string Owner { get; internal set; }
+
+        [JsonProperty("name")]
+        public override string Name { get; internal set; }
+
+        [JsonProperty("Campaign")]
+        public override string Campaign { get; internal set; }
+
+        [JsonProperty("Crew")]
+        public override string Crew { get; internal set; }
+
+        [JsonProperty("worldDescription")]
+        public override string Description { get; internal set; }
+
+        [JsonProperty("type")]
+        public override int Type { get; internal set; }
+
+        [JsonProperty("width")]
+        public override int Width { get; internal set; }
+
+        [JsonProperty("height")]
+        public override int Height { get; internal set; }
+
+        [JsonProperty("plays")]
+        public override int Plays { get; internal set; }
+
+        [JsonProperty("Status")]
+        public override int Status { get; internal set; } = 1;
+
+        [JsonProperty("HideLobby")]
+        public override bool HideLobby { get; internal set; }
+
+        [JsonProperty("Likes")]
+        public override int Likes { get; internal set; }
+
+        [JsonProperty("Favorites")]
+        public override int Favorites { get; internal set; }
+
+        [JsonProperty("BorderType")]
+        public override int BorderType { get; internal set; } = -1;
+
+        [JsonProperty("visible")]
+        public override bool Visible { get; internal set; }
+
+        [JsonProperty("backgroundColor")]
+        public override uint BackgroundColor { get; internal set; }
+
+        [JsonProperty("allowSpectating")]
+        public override bool AllowSpectating { get; internal set; } = true;
+
+        [JsonProperty("MinimapEnabled")]
+        public override bool MinimapEnabled { get; internal set; } = true;
+
+        [JsonProperty("LobbyPreviewEnabled")]
+        public override bool LobbyPreviewEnabled { get; internal set; } = true;
+
+        [JsonProperty("IsCrewLogo")]
+        public override bool IsCrewLogo { get; internal set; }
+
+        [JsonProperty("Gravity")]
+        public override double Gravity { get; internal set; } = -1;
+
+        [JsonProperty("friendsOnly")]
+        public override bool FriendsOnly { get; internal set; }
+
+        [Obsolete("Curses were removed in 2016 - this property is now deprecated.")]
+        [JsonProperty("curseLimit")]
+        public override int CurseLimit { get; internal set; }
+
+        [Obsolete("Zombies were removed in 2016 - this property is now deprecated")]
+        [JsonProperty("zombieLimit")]
+        public override int ZombieLimit { get; internal set; }
+
+        [Obsolete("Woots were removed in 2015 - this property is now deprecated.")]
+        [JsonProperty("woots")]
+        public override int Woots { get; internal set; }
+
+        [Obsolete("Woots were removed in 2015 - this property is now deprecated.")]
+        [JsonProperty("totalwoots")]
+        public override int TotalWoots { get; internal set; }
+
+        [Obsolete("Potions were removed in 2015 - this property is now deprecated.")]
+        [JsonProperty("allowpotions")]
+        public override bool AllowPotions { get; internal set; }
+
+        [Obsolete("Potions were removed in 2015 - this property is now deprecated.")]
+        [JsonProperty("enabledpotions")]
+        public override string EnabledPotions { get; internal set; }
+    }
+
     internal class PropertyEnumerable
     {
         internal Dictionary<string, object> _properties = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
         public Dictionary<string, object> Properties => _properties;
+
         public object this[string key]
         {
             get { return _properties.ContainsKey(key) ? _properties[key] : null; }
@@ -29,7 +140,7 @@ namespace EEWorlds.Handlers.JSON
             return default;
         }
 
-        private static byte[] TryGetBytes(this DatabaseObject input, string key, byte[] defaultValue)
+        internal static byte[] TryGetBytes(this DatabaseObject input, string key, byte[] defaultValue)
         {
             if (input.TryGetValue(key, out var obj))
                 return (obj is string) ? Convert.FromBase64String(obj as string) : (obj is byte[]) ? obj as byte[] : defaultValue;
@@ -37,7 +148,7 @@ namespace EEWorlds.Handlers.JSON
             return defaultValue;
         }
 
-        public static List<JsonBlockChunk> FromWorldData(this DatabaseArray input)
+        internal static List<JsonBlockChunk> FromWorldData(this DatabaseArray input)
         {
             var blocks = new List<JsonBlockChunk>();
 
@@ -69,7 +180,7 @@ namespace EEWorlds.Handlers.JSON
             return blocks;
         }
 
-        public static List<JsonBlockChunk> FromJsonArray(this JObject world)
+        internal static List<JsonBlockChunk> FromJsonArray(this JObject world)
         {
             var array = world["worlddata"].Values().AsJEnumerable();
             var temp = new DatabaseArray();
@@ -88,12 +199,15 @@ namespace EEWorlds.Handlers.JSON
                         case JTokenType.Integer:
                             dbo.Set(property.Name, (uint)value);
                             break;
+
                         case JTokenType.Boolean:
                             dbo.Set(property.Name, (bool)value);
                             break;
+
                         case JTokenType.Float:
                             dbo.Set(property.Name, (double)value);
                             break;
+
                         default:
                             dbo.Set(property.Name, (string)value);
                             break;
@@ -105,105 +219,5 @@ namespace EEWorlds.Handlers.JSON
 
             return FromWorldData(temp);
         }
-    }
-
-    public class JsonWorld : World
-    {
-        internal JObject _world_json_object;
-
-        internal static World Load(string input)
-        {
-            var json_object = JObject.Parse((string)input);
-            var world = JsonConvert.DeserializeObject<JsonWorld>(input);
-
-            world._world_json_object = json_object;
-            return world;
-        }
-
-        [JsonIgnore]
-        public override IEnumerable<IBlockChunk> WorldData { get => this.JsonWorldData; }
-
-        [JsonIgnore]
-        internal IEnumerable<JsonBlockChunk> JsonWorldData => _world_json_object.FromJsonArray();
-
-        [JsonProperty("owner")]
-        public override string Owner { get; set; }
-
-        [JsonProperty("name")]
-        public override string Name { get; set; }
-
-        [JsonProperty("Campaign")]
-        public override string Campaign { get; set; }
-
-        [JsonProperty("Crew")]
-        public override string Crew { get; set; }
-
-        [JsonProperty("type")]
-        public override int Type { get; set; }
-
-        [JsonProperty("width")]
-        public override int Width { get; set; }
-
-        [JsonProperty("height")]
-        public override int Height { get; set; }
-
-        [JsonProperty("plays")]
-        public override int Plays { get; set; }
-
-        [JsonProperty("Status")]
-        public override int Status { get; set; }
-
-        [JsonProperty("HideLobby")]
-        public override bool HideLobby { get; set; }
-
-        [JsonProperty("Likes")]
-        public override int Likes { get; set; }
-
-        [JsonProperty("Favorites")]
-        public override int Favorites { get; set; }
-
-        [JsonProperty("visible")]
-        public override bool Visible { get; set; }
-
-        [JsonProperty("backgroundColor")]
-        public override uint BackgroundColor { get; set; }
-
-        [JsonProperty("allowSpectating")]
-        public override bool AllowSpectating { get; set; } = true;
-
-        [JsonProperty("MinimapEnabled")]
-        public override bool MinimapEnabled { get; set; } = true;
-
-        [JsonProperty("LobbyPreviewEnabled")]
-        public override bool LobbyPreviewEnabled { get; set; } = true;
-
-        [JsonProperty("IsCrewLogo")]
-        public override bool IsCrewLogo { get; set; }
-
-        [JsonProperty("Gravity")]
-        public override double Gravity { get; set; } = 1.0f;
-
-        [JsonProperty("friendsOnly")]
-        public override bool FriendsOnly { get; set; }
-
-        [Obsolete("Curses were removed in 2016 - this property is now deprecated.")]
-        [JsonProperty("curseLimit")]
-        public override int CurseLimit { get; set; }
-
-        [Obsolete("Zombies were removed in 2016 - this property is now deprecated")]
-        [JsonProperty("zombieLimit")]
-        public override int ZombieLimit { get; set; }
-
-        [Obsolete("Woots were removed in 2015 - this property is now deprecated.")]
-        [JsonProperty("woots")]
-        public override int Woots { get; set; }
-
-        [Obsolete("Woots were removed in 2015 - this property is now deprecated.")]
-        [JsonProperty("totalwoots")]
-        public override int TotalWoots { get; set; }
-
-        [Obsolete("Potions were removed in 2015 - this property is now deprecated.")]
-        [JsonProperty("allowpotions")]
-        public override bool AllowPotions { get; set; }
     }
 }

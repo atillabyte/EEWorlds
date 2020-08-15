@@ -8,11 +8,19 @@
 
   <ItemGroup>
     <None Remove="includes\PW9ZxUoVbBb0I.json" />
+    <None Remove="includes\PWfGHlYfF6cUI.eelevel" />
+    <None Remove="includes\PWXFk-UKg_b0I.eelvl" />
     <None Remove="includes\PW_Dc2Pqq8a0I.tson" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="includes\PW9ZxUoVbBb0I.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="includes\PWfGHlYfF6cUI.eelevel">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="includes\PWXFk-UKg_b0I.eelvl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="includes\PW_Dc2Pqq8a0I.tson">
@@ -27,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\World\EEWorlds.csproj" />
+    <ProjectReference Include="..\EEWorlds\EEWorlds.csproj" />
   </ItemGroup>
 
 </Project>

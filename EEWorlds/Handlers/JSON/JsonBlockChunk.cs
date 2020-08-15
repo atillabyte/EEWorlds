@@ -18,6 +18,8 @@
         public string TextMessage1 { get => _properties.Get<string>("mes1"); set => _properties["mes1"] = value; }
         public string TextMessage2 { get => _properties.Get<string>("mes2"); set => _properties["mes2"] = value; }
         public string TextMessage3 { get => _properties.Get<string>("mes3"); set => _properties["mes3"] = value; }
+        public string TextColor { get => _properties.Get<string>("text_color"); set => _properties["text_color"] = value; }
+        public uint WrapLength { get => (uint)_properties.Get<int>("goal"); set => _properties["goal"] = value; }
 
         public string TextMessageFirst { get => TextMessage1; set => TextMessage1 = value; }
         public string TextMessageSecond { get => TextMessage2; set => TextMessage2 = value; }

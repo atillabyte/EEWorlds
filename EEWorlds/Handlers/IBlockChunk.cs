@@ -3,6 +3,7 @@
     public interface IBlockChunk
     {
         uint Type { get; set; }
+        uint WrapLength { get; set; }
 
         int Layer { get; set; }
         int Rotation { get; set; }
@@ -18,6 +19,7 @@
         string TextMessageFirst { get; set; }
         string TextMessageSecond { get; set; }
         string TextMessageThird { get; set; }
+        string TextColor { get; set; }
 
         object Id { get; set; }
         object Target { get; set; }

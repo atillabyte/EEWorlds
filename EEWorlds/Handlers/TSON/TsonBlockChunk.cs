@@ -48,5 +48,11 @@ namespace EEWorlds.Handlers.TSON
 
         [TsonProperty("mes3")]
         public string TextMessageThird { get; set; }
+
+        [TsonProperty("goal")]
+        public uint WrapLength { get; set; }
+
+        [TsonProperty("text_color")]
+        public string TextColor { get; set; }
     }
 }
