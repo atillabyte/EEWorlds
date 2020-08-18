@@ -1,4 +1,4 @@
-## Everybody Edits World Library
+<h1> Everybody Edits World Library <img src="https://img.shields.io/nuget/v/EEWorlds.svg?style=flat-square&label=nuget+(EEWorlds)"/> <h1>
 
 <p align="center">
   <img width="460" height="300" src="https://i.imgur.com/SSU2oxl.png">
