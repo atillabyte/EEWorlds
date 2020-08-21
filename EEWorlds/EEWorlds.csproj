@@ -10,6 +10,7 @@
     <PackageProjectUrl>https://github.com/atillabyte/EEWorlds</PackageProjectUrl>
     <RepositoryUrl>https://github.com/atillabyte/EEWorlds</RepositoryUrl>
     <PackageTags>Everybody Edits, EEWorlds, Everybody Edits Worlds</PackageTags>
+    <Version>1.2.5</Version>
   </PropertyGroup>
 
   <ItemGroup>

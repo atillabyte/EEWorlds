@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using BotBits;
+using Rectangle = BotBits.Rectangle;
 
 namespace EEWorlds
 {
@@ -8,6 +9,60 @@ namespace EEWorlds
     {
         private World World { get; set; }
         private Color BackgroundColor { get; set; }
+
+        public Bitmap GenerateBitmap(Rectangle rectangle)
+        {
+            var bitmap = new Bitmap(rectangle.Width, rectangle.Height);
+            var graphics = Graphics.FromImage(bitmap);
+
+            graphics.Clear(this.BackgroundColor == Color.FromArgb(0, 0, 0, 0) ? Color.Black : this.BackgroundColor);
+
+            // fill background
+            var background_brushes = new Dictionary<int, SolidBrush>();
+            for (var x = 0; x < this.World.Width; x++)
+            {
+                for (var y = 0; y < this.World.Height; y++)
+                {
+                    if (!rectangle.IntersectsWith(new Rectangle(x, y, 1, 1)))
+                        continue;
+
+                    var blockId = (int)this.World.Background[x, y].Id;
+
+                    if (this.GetColor(blockId, out var color))
+                    {
+                        if (!background_brushes.ContainsKey(blockId))
+                            background_brushes.Add(blockId, new SolidBrush(color));
+
+                        var brush = background_brushes[blockId];
+                        graphics.FillRectangle(brush, x, y, 1, 1);
+                    }
+                }
+            }
+
+            // fill foreground
+            var foreground_brushes = new Dictionary<int, SolidBrush>();
+            for (var x = 0; x < this.World.Width; x++)
+            {
+                for (var y = 0; y < this.World.Height; y++)
+                {
+                    if (!rectangle.IntersectsWith(new Rectangle(x, y, 1, 1)))
+                        continue;
+
+                    var blockId = (int)this.World.Foreground[x, y].Id;
+
+                    if (this.GetColor(blockId, out var color))
+                    {
+                        if (!foreground_brushes.ContainsKey(blockId))
+                            foreground_brushes.Add(blockId, new SolidBrush(color));
+
+                        var brush = foreground_brushes[blockId];
+                        graphics.FillRectangle(brush, x, y, 1, 1);
+                    }
+                }
+            }
+
+            return bitmap;
+        }
 
         public Bitmap GenerateBitmap()
         {
@@ -81,7 +136,7 @@ namespace EEWorlds
                 (byte)((color >> 8) & 0b11111111),
                 (byte)(color & 0b11111111));
 
-        internal Dictionary<int, (int r, int g, int b, int a)> ColorMap = new Dictionary<int, (int r, int g, int b, int a)>()
+        internal static Dictionary<int, (int r, int g, int b, int a)> ColorMap = new Dictionary<int, (int r, int g, int b, int a)>()
         {
             /* id, r, g, b, a */
             { 0, (0, 0, 0, 255) },
