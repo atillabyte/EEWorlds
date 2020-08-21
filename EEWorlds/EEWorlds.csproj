@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>A library to handle loading Everybody Edits worlds from various formats.</Description>
+    <Copyright>MIT</Copyright>
+    <Authors>Atilla Lonny</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/atillabyte/EEWorlds</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/atillabyte/EEWorlds</RepositoryUrl>
+    <PackageTags>Everybody Edits, EEWorlds, Everybody Edits Worlds</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
