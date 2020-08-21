@@ -65,7 +65,6 @@ namespace EEWorlds
 
             this.LoadBlocks(world, out var encountered_errors);
             this.Minimap = new Minimap(this, this.BackgroundColor);
-
             this.HasErrors = encountered_errors;
         }
 
