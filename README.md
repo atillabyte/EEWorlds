@@ -14,7 +14,7 @@ A library to handle loading Everybody Edits worlds from various formats. such as
 ## Usage
 ```csharp
 // TSON
-var world = WorldManager.LoadFromTSON(File.ReadAllBytes("PW_Dc2Pqq8a0I.tson"));
+var world = WorldManager.LoadFromTSON(File.ReadAllText("PW_Dc2Pqq8a0I.tson"));
 
 // EEditor
 var world = WorldManager.LoadFromEEditor(File.ReadAllBytes("PW1Ecl-na0I.eelevel"), EELevelVersion.V6);
